@@ -1,0 +1,13 @@
+<div class="cont d-flex justify-content-center align-items-center flex-column">
+
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" (change)="fileChangeEvent($event)">
+    <label class="custom-file-label">Choose file</label>
+  </div>
+  
+  <div>
+
+  </div>
+    <img [src]="imageSrc" #img *ngIf="imageSrc"/>
+    <p id="label">{{caption}}</p>
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Prediction } from '../prediction';
 import * as mobilenet from '@tensorflow-models/mobilenet';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -51,7 +51,6 @@ export class ImageClassfierUploadComponent implements OnInit {
               });
       };
     }
-
   }
 
   input(name) {

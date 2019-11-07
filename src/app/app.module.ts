@@ -8,6 +8,7 @@ import { ImageClassfierUploadComponent } from './image-classfier-upload/image-cl
 import { ImageClassifierWebcamComponent } from './image-classifier-webcam/image-classifier-webcam.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ImageClassifierWebcamClientComponent } from './image-classifier-webcam-client/image-classifier-webcam-client.component';
+import { ImageClassifierCaptionbotComponent } from './image-classifier-captionbot/image-classifier-captionbot.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ImageClassifierWebcamClientComponent } from './image-classifier-webcam-
     HeaderComponent,
     ImageClassfierUploadComponent,
     ImageClassifierWebcamComponent,
-    ImageClassifierWebcamClientComponent
+    ImageClassifierWebcamClientComponent,
+    ImageClassifierCaptionbotComponent
   ],
   imports: [
     BrowserModule,

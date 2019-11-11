@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -9,6 +8,8 @@ import { ImageClassifierWebcamComponent } from './image-classifier-webcam/image-
 import { HttpClientModule } from '@angular/common/http';
 import { ImageClassifierWebcamClientComponent } from './image-classifier-webcam-client/image-classifier-webcam-client.component';
 import { ImageClassifierCaptionbotComponent } from './image-classifier-captionbot/image-classifier-captionbot.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { ImageClassifierCaptionbotComponent } from './image-classifier-captionbo
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

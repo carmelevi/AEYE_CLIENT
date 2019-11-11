@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Prediction } from '../prediction';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import { HttpClient } from '@angular/common/http';
-
+import Speech from 'speak-tts';
 
 @Component({
   selector: 'app-image-classfier-upload',
@@ -15,6 +15,8 @@ export class ImageClassfierUploadComponent implements OnInit {
 
   predictions: Prediction[];
   label: string;
+  speech: any;
+  shouldRead: boolean;
 
   helloMsg: string;
   name: string;
@@ -26,9 +28,13 @@ export class ImageClassfierUploadComponent implements OnInit {
 
   async ngOnInit() {
     console.log('loading mobilenet model...');
-    this.model = await mobilenet.load();
+    // this.model = await mobilenet.load();
     console.log('Sucessfully loaded model');
     this.loading = false;
+    this.speech = new Speech();
+    this.speech.init({
+      'lang': 'en-GB'
+    });
   }
 
   async fileChangeEvent(event) {
@@ -47,7 +53,16 @@ export class ImageClassfierUploadComponent implements OnInit {
           })
           .subscribe(
               response => {
-                this.label = response['label'];
+                if (this.label !== response['label']) {
+                  this.label = response['label'];
+                  if (this.shouldRead) {
+                    this.speech.speak({
+                      text: this.label,
+                    }).catch(e => {
+                      console.error('An error occurred while reading :', e);
+                    });
+                  }
+                }
               });
       };
     }
@@ -66,6 +81,17 @@ export class ImageClassfierUploadComponent implements OnInit {
         response => {
           this.helloMsg = response['greeting'];
         });
+}
+
+onSpeechChange(event) {
+  this.shouldRead = event.checked;
+  if (this.shouldRead) {
+    this.speech.speak({
+      text: this.label,
+    }).catch(e => {
+      console.error('An error occurred while reading :', e);
+    });
+  }
 }
 
 }

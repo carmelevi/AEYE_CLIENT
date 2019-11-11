@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Prediction } from '../prediction';
-import * as mobilenet from '@tensorflow-models/mobilenet';
 import { HttpClient } from '@angular/common/http';
 import Speech from 'speak-tts';
 
@@ -31,12 +30,9 @@ export class ImageClassfierUploadComponent implements OnInit {
   constructor(private httpClient: HttpClient) { }
 
   async ngOnInit() {
+    this.loading = false;
     this.btnFlag = 'uk';
     this.langLabel = 'EN';
-    console.log('loading mobilenet model...');
-    // this.model = await mobilenet.load();
-    console.log('Sucessfully loaded model');
-    this.loading = false;
     this.speech_en = new Speech();
     this.speech_en.init({
       'lang': 'en-GB'

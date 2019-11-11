@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import Speech from 'speak-tts';
+
 
 @Component({
   selector: 'app-image-classifier-webcam-client',
@@ -12,9 +14,30 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
   @ViewChild('canvas') canvas: ElementRef;
   label: string;
   percentage: number;
+  speech: any;
+  speech_en: any;
+  speech_it: any;
+  shouldRead: boolean;
+
+  btnFlag: string;
+  langLabel: string;
+
   constructor(private httpClient: HttpClient) { }
 
   async ngOnInit() {
+
+    this.btnFlag = 'uk';
+    this.langLabel = 'EN';
+    this.speech_en = new Speech();
+    this.speech_en.init({
+      'lang': 'en-GB'
+    });
+    this.speech_it = new Speech();
+    this.speech_it.init({
+      'lang': 'it-IT'
+    });
+    this.speech = this.speech_en;
+
     setInterval(async () => {
       this.canvas.nativeElement.getContext('2d').drawImage(this.video.nativeElement, 0, 0, 300, 300);
       const imageSrc = this.canvas.nativeElement.toDataURL('image/jpeg')
@@ -25,10 +48,31 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
         })
         .subscribe(
             response => {
-              this.label = response['label_en'];
               this.percentage = parseFloat(response['percentage']);
+              if ( this.langLabel === 'EN') {
+                if (this.label !== response['label_en']) {
+                  this.label = response['label_en'];
+                  this.checkRead();
+                }
+              } else {
+                if (this.label !== response['label_it']) {
+                  this.label = response['label_it'];
+                  this.checkRead();
+                }
+              }
+
             });
     }, 1000);
+  }
+
+  checkRead() {
+    if (this.shouldRead) {
+      this.speech.speak({
+        text: this.label,
+      }).catch(e => {
+        console.error('An error occurred while reading :', e);
+      });
+    }
   }
 
   async ngAfterViewInit() {
@@ -43,6 +87,29 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
         .catch((err0r) => {
           console.log('Something went wrong!');
         });
+    }
+  }
+
+  onSpeechChange(event) {
+    this.shouldRead = event.checked;
+    if (this.shouldRead) {
+        this.speech.speak({
+          text: this.label,
+        }).catch(e => {
+          console.error('An error occurred while reading :', e);
+        });
+    }
+  }
+
+  onLangClick() {
+    if (this.btnFlag === 'uk') {
+      this.btnFlag = 'italy';
+      this.langLabel = 'IT';
+      this.speech = this.speech_it;
+    } else {
+      this.btnFlag = 'uk';
+      this.langLabel = 'EN';
+      this.speech = this.speech_en;
     }
   }
 

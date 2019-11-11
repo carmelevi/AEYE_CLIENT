@@ -25,7 +25,7 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
         })
         .subscribe(
             response => {
-              this.label = response['label'];
+              this.label = response['label_en'];
               this.percentage = parseFloat(response['percentage']);
             });
     }, 1000);

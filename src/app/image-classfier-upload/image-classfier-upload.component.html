@@ -1,6 +1,9 @@
-<div class="cont d-flex justify-content-center align-items-center flex-column">
-
+<div class="d-flex justify-content-around">
+  <button mat-button (click)="onLangClick()" ><img style="width:30px;height:30px;" src="../../assets/{{btnFlag}}.png"/>  {{langLabel}}</button>
   <mat-slide-toggle (change)="onSpeechChange($event)">Speech</mat-slide-toggle>
+</div>
+
+<div class="cont d-flex justify-content-center align-items-center flex-column">
 
   <div class="custom-file">
     <input type="file" class="custom-file-input" (change)="fileChangeEvent($event)">
@@ -17,9 +20,8 @@
 
   </ng-template>
 
-  <div class="input-name">
-    <input type="text" (input)="input($event.target.value)">
-    <button type="button" (click)="onClick()">Submit Name</button>
+  <div class="server-check">
+      <button mat-mini-fab color="primary" (click)="onClick()">Ping</button>
     <p id="greeting">{{helloMsg}}</p>
   </div>
 

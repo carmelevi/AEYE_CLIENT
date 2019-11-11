@@ -16,25 +16,36 @@ export class ImageClassfierUploadComponent implements OnInit {
   predictions: Prediction[];
   label: string;
   speech: any;
+  speech_en: any;
+  speech_it: any;
   shouldRead: boolean;
 
   helloMsg: string;
-  name: string;
   model: any;
   loading = true;
+
+  btnFlag: string;
+  langLabel: string;
 
 
   constructor(private httpClient: HttpClient) { }
 
   async ngOnInit() {
+    this.btnFlag = 'uk';
+    this.langLabel = 'EN';
     console.log('loading mobilenet model...');
     // this.model = await mobilenet.load();
     console.log('Sucessfully loaded model');
     this.loading = false;
-    this.speech = new Speech();
-    this.speech.init({
+    this.speech_en = new Speech();
+    this.speech_en.init({
       'lang': 'en-GB'
     });
+    this.speech_it = new Speech();
+    this.speech_it.init({
+      'lang': 'it-IT'
+    });
+    this.speech = this.speech_en;
   }
 
   async fileChangeEvent(event) {
@@ -53,30 +64,30 @@ export class ImageClassfierUploadComponent implements OnInit {
           })
           .subscribe(
               response => {
-                if (this.label !== response['label']) {
-                  this.label = response['label'];
-                  if (this.shouldRead) {
-                    this.speech.speak({
-                      text: this.label,
-                    }).catch(e => {
-                      console.error('An error occurred while reading :', e);
-                    });
+
+                if ( this.langLabel === 'EN') {
+                  if (this.label !== response['label_en']) {
+                    this.label = response['label_en'];
                   }
+                } else {
+                  if (this.label !== response['label_it']) {
+                    this.label = response['label_it'];
+                  }
+                }
+                if (this.shouldRead) {
+                  this.speech.speak({
+                    text: this.label,
+                  }).catch(e => {
+                    console.error('An error occurred while reading :', e);
+                  });
                 }
               });
       };
     }
   }
 
-  input(name) {
-    this.name = name;
-  }
-
   async onClick() {
-    this.httpClient.post('http://127.0.0.1:9050/hello',
-    {
-        name: this.name
-    })
+    this.httpClient.get('http://127.0.0.1:9050/ping')
     .subscribe(
         response => {
           this.helloMsg = response['greeting'];
@@ -86,11 +97,23 @@ export class ImageClassfierUploadComponent implements OnInit {
 onSpeechChange(event) {
   this.shouldRead = event.checked;
   if (this.shouldRead) {
-    this.speech.speak({
-      text: this.label,
-    }).catch(e => {
-      console.error('An error occurred while reading :', e);
-    });
+      this.speech.speak({
+        text: this.label,
+      }).catch(e => {
+        console.error('An error occurred while reading :', e);
+      });
+  }
+}
+
+onLangClick() {
+  if (this.btnFlag === 'uk') {
+    this.btnFlag = 'italy';
+    this.langLabel = 'IT';
+    this.speech = this.speech_it;
+  } else {
+    this.btnFlag = 'uk';
+    this.langLabel = 'EN';
+    this.speech = this.speech_en;
   }
 }
 

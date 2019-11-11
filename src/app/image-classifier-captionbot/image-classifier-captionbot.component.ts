@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import Speech from 'speak-tts';
 
 
 @Component({
@@ -12,9 +13,16 @@ export class ImageClassifierCaptionbotComponent implements OnInit {
   imageSrc: string;
   @ViewChild('img') imageEl: ElementRef;
   caption: string;
+  speech: any;
+  shouldRead: boolean;
+
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit() {
+    this.speech = new Speech();
+    this.speech.init({
+      'lang': 'en-GB'
+    });
   }
 
   async fileChangeEvent(event) {
@@ -35,8 +43,26 @@ export class ImageClassifierCaptionbotComponent implements OnInit {
           .subscribe(
               response => {
                 this.caption = response['caption'];
+                if (this.shouldRead) {
+                  this.speech.speak({
+                    text: this.caption,
+                  }).catch(e => {
+                    console.error('An error occurred while reading :', e);
+                  });
+                }
               });
       };
+    }
+  }
+
+  onSpeechChange(event) {
+    this.shouldRead = event.checked;
+    if (this.shouldRead) {
+        this.speech.speak({
+          text: this.caption,
+        }).catch(e => {
+          console.error('An error occurred while reading :', e);
+        });
     }
   }
 

@@ -1,5 +1,7 @@
 <div class="cont d-flex justify-content-center align-items-center flex-column">
 
+  <mat-slide-toggle (change)="onSpeechChange($event)">Speech</mat-slide-toggle>
+
   <div class="custom-file">
     <input type="file" class="custom-file-input" (change)="fileChangeEvent($event)">
     <label class="custom-file-label">Choose file</label>

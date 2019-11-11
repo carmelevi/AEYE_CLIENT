@@ -7,7 +7,7 @@
 
   <div class="list-group">
     <div class="list-group-item" *ngFor="let prediction of predictions">
-      {{prediction.className}} - {{prediction.probability}}
+      {{prediction.className}} - {{prediction.probability | percent:'.2'}}
     </div>
   </div>
 </div>

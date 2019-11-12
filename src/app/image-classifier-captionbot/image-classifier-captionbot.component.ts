@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Speech from 'speak-tts';
+import { Contants } from './../constants';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class ImageClassifierCaptionbotComponent implements OnInit {
       reader.onload = (res: any) => {
         this.imageSrc = res.target.result;
         const imageEncoded = this.imageSrc.replace('data:image/jpeg;base64,', '');
-        this.httpClient.post('http://127.0.0.1:9050/caption_bot',
+        this.httpClient.post(Contants.API_ENDPOINT + '/caption_bot',
           {
             image: imageEncoded
           })

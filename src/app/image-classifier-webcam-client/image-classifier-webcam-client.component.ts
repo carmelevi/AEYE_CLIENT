@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Speech from 'speak-tts';
+import { Contants } from './../constants';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
       this.canvas.nativeElement.getContext('2d').drawImage(this.video.nativeElement, 0, 0, 300, 300);
       const imageSrc = this.canvas.nativeElement.toDataURL('image/jpeg')
       const imageEncoded = imageSrc.replace('data:image/jpeg;base64,', '');
-      this.httpClient.post('http://127.0.0.1:9050/predict',
+      this.httpClient.post(Contants.API_ENDPOINT + '/predict',
         {
           image: imageEncoded
         })

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Prediction } from '../prediction';
 import { HttpClient } from '@angular/common/http';
+import { Contants } from './../constants';
 import Speech from 'speak-tts';
 
 @Component({
@@ -54,7 +55,7 @@ export class ImageClassfierUploadComponent implements OnInit {
         this.imageSrc = res.target.result;
         const imageEncoded = this.imageSrc.replace('data:image/jpeg;base64,', '');
           // this.predictions = await this.model.classify(imgEl);
-        this.httpClient.post('http://127.0.0.1:9050/predict',
+        this.httpClient.post(Contants.API_ENDPOINT + '/predict',
           {
             image: imageEncoded
           })
@@ -83,7 +84,7 @@ export class ImageClassfierUploadComponent implements OnInit {
   }
 
   async onClick() {
-    this.httpClient.get('http://127.0.0.1:9050/ping')
+    this.httpClient.get(Contants.API_ENDPOINT + '/ping')
     .subscribe(
         response => {
           this.helloMsg = response['greeting'];

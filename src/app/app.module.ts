@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { DeviceDetectorModule } from 'ngx-device-detector';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { MatInputModule } from '@angular/material/input';
     BrowserAnimationsModule,
     MatSlideToggleModule,
     MatButtonModule,
-    MatInputModule
+    MatInputModule,
+    DeviceDetectorModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

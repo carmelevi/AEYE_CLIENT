@@ -5,6 +5,7 @@
 
 <div class="d-flex justify-content-center align-items-center flex-column">
   <video autoplay playsinline muted id="webcam" width="300" height="300" #video></video>
+  <button mat-button id='flipCamera' (click)="onChangeCamClick()"><img style="width:30px;height:30px;" src="../../assets/flipCamera.png"/></button>
   <p id="label">{{label}}</p>
   <p id="percentage">{{percentage | percent:'2.2'}}</p>
   <canvas #canvas id="canvas" width="300" height="300"  style="visibility: hidden"></canvas>

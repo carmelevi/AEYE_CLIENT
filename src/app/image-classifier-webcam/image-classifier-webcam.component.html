@@ -5,6 +5,9 @@
     <img src="./assets/loading.gif">
   </div>
 
+  <button mat-button id='flipCamera' (click)="onChangeCamClick()"><img style="width:30px;height:30px;" src="../../assets/flipCamera.png"/></button>
+
+
   <div class="list-group">
     <div class="list-group-item" *ngFor="let prediction of predictions">
       {{prediction.className}} - {{prediction.probability | percent:'.2'}}

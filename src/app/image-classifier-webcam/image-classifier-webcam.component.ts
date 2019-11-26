@@ -1,5 +1,6 @@
 import { Prediction } from './../prediction';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import * as tf from '@tensorflow/tfjs';
 
@@ -14,9 +15,13 @@ export class ImageClassifierWebcamComponent implements OnInit, AfterViewInit {
   predictions: Prediction[];
   model: any;
   loading = true;
-  constructor() { }
+  flip = false;
+  constructor(private deviceService: DeviceDetectorService) {}
 
   async ngOnInit() {
+    if (this.deviceService.isDesktop()) {
+      document.getElementById('flipCamera').style.visibility = 'hidden';
+    }
     console.log('loading mobilenet model...');
     this.model = await mobilenet.load();
     console.log('Sucessfully loaded model');
@@ -32,15 +37,51 @@ export class ImageClassifierWebcamComponent implements OnInit, AfterViewInit {
     const vid = this.video.nativeElement;
 
     if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
+      navigator.mediaDevices.getUserMedia(
+        { video: true
+        })
         .then((stream) => {
           vid.srcObject = stream;
 
         })
-        .catch((err0r) => {
+        .catch((error) => {
           console.log('Something went wrong!');
         });
     }
+  }
+
+  onChangeCamClick() {
+    const vid = this.video.nativeElement;
+
+    if (this.flip) {
+      if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia(
+          { video: true })
+          .then((stream) => {
+            vid.srcObject = stream;
+          })
+          .catch((error) => {
+            console.log('Something went wrong!');
+          });
+      }
+    } else {
+      if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia(
+          { video: {
+            facingMode: {
+              exact: 'environment'
+            }
+          }
+        })
+          .then((stream) => {
+            vid.srcObject = stream;
+          })
+          .catch((error) => {
+            console.log('Something went wrong!');
+          });
+      }
+    }
+    this.flip = !this.flip;
   }
 
 }

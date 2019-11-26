@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DeviceDetectorService } from 'ngx-device-detector';
 import Speech from 'speak-tts';
 import { Contants } from './../constants';
 
@@ -23,10 +24,13 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
   btnFlag: string;
   langLabel: string;
 
-  constructor(private httpClient: HttpClient) { }
+  flip = false;
+  constructor(private httpClient: HttpClient, private deviceService: DeviceDetectorService) { }
 
   async ngOnInit() {
-
+    if (this.deviceService.isDesktop()) {
+      document.getElementById('flipCamera').style.visibility = 'hidden';
+    }
     this.btnFlag = 'uk';
     this.langLabel = 'EN';
     this.speech_en = new Speech();
@@ -80,12 +84,14 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
     const vid = this.video.nativeElement;
 
     if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
+      navigator.mediaDevices.getUserMedia(
+        { video: true
+        })
         .then((stream) => {
           vid.srcObject = stream;
 
         })
-        .catch((err0r) => {
+        .catch((error) => {
           console.log('Something went wrong!');
         });
     }
@@ -112,6 +118,40 @@ export class ImageClassifierWebcamClientComponent implements OnInit, AfterViewIn
       this.langLabel = 'EN';
       this.speech = this.speech_en;
     }
+  }
+
+  onChangeCamClick() {
+    const vid = this.video.nativeElement;
+
+    if (this.flip) {
+      if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia(
+          { video: true })
+          .then((stream) => {
+            vid.srcObject = stream;
+          })
+          .catch((error) => {
+            console.log('Something went wrong!');
+          });
+      }
+    } else {
+      if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia(
+          { video: {
+            facingMode: {
+              exact: 'environment'
+            }
+          }
+        })
+          .then((stream) => {
+            vid.srcObject = stream;
+          })
+          .catch((error) => {
+            console.log('Something went wrong!');
+          });
+      }
+    }
+    this.flip = !this.flip;
   }
 
 }
